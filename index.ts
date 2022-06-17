@@ -19,7 +19,7 @@ export default async function handler(event: APIGatewayProxyEventV2): Promise<AP
         }
     }
 
-    const startingSitePath = event.queryStringParameters["path"]
+    const startingSitePath = decodeURIComponent(event.queryStringParameters["path"])
 
     const result = {
         url: await getRedirectLocation(startingSitePath)
