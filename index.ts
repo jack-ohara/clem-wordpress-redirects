@@ -1,5 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import axios from "axios";
+import { URL } from "url";
 
 export default async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
     if (!process.env.WP_BASE_URL) {
@@ -31,7 +32,7 @@ export default async function handler(event: APIGatewayProxyEventV2): Promise<AP
 }
 
 async function getRedirectLocation(path: string): Promise<string> {
-    const response = await axios.get(path)
+    const response = await axios.get(`${process.env.WP_BASE_URL}${path}`)
 
     console.log(response)
 
