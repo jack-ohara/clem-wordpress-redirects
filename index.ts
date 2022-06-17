@@ -19,7 +19,7 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
         }
     }
 
-    const startingSitePath = decodeURIComponent(event.queryStringParameters["path"])
+    const startingSitePath = event.queryStringParameters["path"]
 
     const result = {
         url: await getRedirectLocation(startingSitePath)
@@ -34,7 +34,12 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
 async function getRedirectLocation(path: string): Promise<string> {
     const response = await axios.get(`${process.env.WP_BASE_URL}${path}`)
 
+    if (response.status === 200) {
+        return response.request.path
+    }
+
+    console.error("Call to wordpress did not produce a 200")
     console.log(response)
 
-    return "";
+    throw new Error("Call to wordpress did not produce a 200");    
 }
